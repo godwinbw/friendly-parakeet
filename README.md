@@ -53,7 +53,7 @@
 
 ### **Challenge Three - live link**
 
-<https://godwinbw.github.io/friendly-parakeet/develop/>
+<https://godwinbw.github.io/friendly-parakeet/Develop/>
 
 ### **Challenge Three - screenshot**
 
