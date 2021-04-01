@@ -31,6 +31,23 @@ var passwordParameters = {
       this.includesSpecial
     );
   },
+  getValidCharacters: function () {
+    // this will return a single string of all valid characters, based on current settings
+    var allValidChars = "";
+    if (this.includesLowercase) {
+      allValidChars = allValidChars + this.lowercaseChars;
+    }
+    if (this.includesUppercase) {
+      allValidChars = allValidChars + this.uppercaseChars;
+    }
+    if (this.includesNumeric) {
+      allValidChars = allValidChars + this.numericChars;
+    }
+    if (this.includesSpecial) {
+      allValidChars = allValidChars + this.specialChars;
+    }
+    return allValidChars;
+  },
 };
 
 var getPasswordLength = function (minPasswordLength, maxPasswordLength) {
@@ -106,9 +123,11 @@ var getPasswordLength = function (minPasswordLength, maxPasswordLength) {
 
 var isLowercaseIncluded = function () {
   // prompt the user to specify if lowercase characters should be included in the password
-
   console.log("isLowercaseIncluded START...");
-  var includeLowercase = true;
+  var includeLowercase = window.confirm(
+    "Do you want to include LOWERCASE characters in your password? Select OK for YES, or Cancel for NO"
+  );
+  console.log("    includeLowercase -> " + includeLowercase);
 
   console.log("...isLowercaseIncluded END");
   return includeLowercase;
@@ -117,7 +136,10 @@ var isLowercaseIncluded = function () {
 var isUppercaseIncluded = function () {
   // prompt the user to specify if uppercase characters should be inculded in the password
   console.log("isUppercaseIncluded START...");
-  var includeUppercase = true;
+  var includeUppercase = window.confirm(
+    "Do you want to include UPPERCASE characters in your password? Select OK for YES, or Cancel for NO"
+  );
+  console.log("    includeUppercase -> " + includeUppercase);
 
   console.log("...isUppercaseIncluded END");
   return includeUppercase;
@@ -126,7 +148,10 @@ var isUppercaseIncluded = function () {
 var isNumericIncluded = function () {
   // prompt the user to specify if numeric characters should be inculded in the password
   console.log("isNumericIncluded START...");
-  var includeNumeric = true;
+  var includeNumeric = window.confirm(
+    "Do you want to include NUMERIC characters in your password? Select OK for YES, or Cancel for NO"
+  );
+  console.log("    includeNumeric -> " + includeNumeric);
 
   console.log("...isNumericIncluded END");
   return includeNumeric;
@@ -135,7 +160,10 @@ var isNumericIncluded = function () {
 var isSpecialIncluded = function () {
   // prompt the user to specify if special characters should be inculded in the password
   console.log("isSpecialIncluded START...");
-  var includeSpecial = true;
+  var includeSpecial = window.confirm(
+    "Do you want to include SPECIAL characters in your password? Select OK for YES, or Cancel for NO"
+  );
+  console.log("    includeSpecial -> " + includeSpecial);
 
   console.log("...isSpecialIncluded END");
   return includeSpecial;
@@ -145,8 +173,22 @@ var generatePasswordFromUserInputs = function (userParameters) {
   // generate the password based on the prompts the user supplied
   console.log("generatePasswordFromUserInputs START...");
 
-  var generatedPassword = "test";
+  var generatedPassword = "";
+  var validCharacters = userParameters.getValidCharacters();
 
+  // loop for each character we need to create in the password
+  for (var i = 0; i < userParameters.passwordLength; i++) {
+    // for each character, we need to pick a random character from all the valid characters based on user settings
+    // we will generate a random number between 0 and the length of the validCharacters string, and our character
+    // will be whatever character is in the position
+
+    // we will add that to our generated password
+    generatedPassword =
+      generatedPassword +
+      validCharacters[Math.floor(Math.random() * validCharacters.length)];
+  }
+
+  console.log("   generated password -> " + generatedPassword);
   console.log("...generatePasswordFromUserInputs END");
   return generatedPassword;
 };
@@ -154,19 +196,16 @@ var generatePasswordFromUserInputs = function (userParameters) {
 var generatePassword = function () {
   console.log("generatePassword START...");
 
-  // step 1 -> initialize our generatedPasswod
-  var generatedPassword = "test";
-
-  // step 2 -> reset our password parameters
+  // step 1 -> reset our password parameters
   passwordParameters.reset();
 
-  // step 3 -> user specifies password length
+  // step 2 -> user specifies password length
   passwordParameters.passwordLength = getPasswordLength(
     passwordParameters.minPasswordLength,
     passwordParameters.maxPasswordLength
   );
 
-  // step 4 -> user specifies included character types, they must choose at least one
+  // step 3 -> user specifies included character types, they must choose at least one
   do {
     passwordParameters.includesLowercase = isLowercaseIncluded();
     passwordParameters.includesUppercase = isUppercaseIncluded();
@@ -174,7 +213,7 @@ var generatePassword = function () {
     passwordParameters.includesSpecial = isSpecialIncluded();
   } while (!passwordParameters.areCharChoicesValid());
 
-  // step 5 -> generate the password
+  // step 4 -> generate the password
   console.log("...generatePassword END");
   return generatePasswordFromUserInputs(passwordParameters);
 };
