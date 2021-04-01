@@ -1,10 +1,8 @@
 # **Bryan Godwin - Week 3 Challenge**
 
-# Password Generator Starter Code
+## **JavaScript Challenge: Password Generator**
 
-## **Advanced CSS Challenge: Professional Portfolio**
-
-### This challenge is to build a website to showcase your work portfolio
+### This challenge is to create an application that generates a password based on user-selected criteria
 
 ### **User Story**
 
