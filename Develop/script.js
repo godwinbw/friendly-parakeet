@@ -1,6 +1,8 @@
 // Assignment code here
 
 // this variable holds all the user-specified parameters for the password
+// includes functions to reset to defaults, and to validate character type input choices
+
 var passwordParameters = {
   passwordlength: 16,
   minPasswordLength: 8,
@@ -36,10 +38,70 @@ var getPasswordLength = function (minPasswordLength, maxPasswordLength) {
   // keep asking until a valid response is received
 
   console.log("getPasswordLength START...");
-  var passwordLength = 8;
 
+  // initialize our variables
+  var passwordLength;
+  var passwordLengthParsed;
+  var validPasswordLength;
+
+  do {
+    // prompt user to enter a password length between minPasswordLength and maxPasswordLength
+    passwordLength = prompt(
+      "Specify the length of your desired password, between " +
+        minPasswordLength +
+        " and " +
+        maxPasswordLength +
+        " characters"
+    );
+
+    validPasswordLength = true; // assume the user specified a valid password length
+    passwordLengthParsed = parseInt(passwordLength); // convert the user input to a number
+
+    if (isNaN(passwordLengthParsed)) {
+      // the input the user supplied was not a number
+      console.log(
+        "   ERROR : user specified password length is not a number -> " +
+          passwordLength
+      );
+      alert(
+        "The password length you specified (" +
+          passwordLength +
+          ") is not a number.  Please try again"
+      );
+      validPasswordLength = false;
+    } else if (passwordLengthParsed < minPasswordLength) {
+      // password is too short
+      console.log(
+        "   ERROR : user specified password length is too short -> " +
+          passwordLengthParsed
+      );
+      alert(
+        "The password length you specified (" +
+          passwordLengthParsed +
+          " characters) is too short.  Please try again"
+      );
+      validPasswordLength = false;
+    } else if (passwordLengthParsed > maxPasswordLength) {
+      // password is too long
+      console.log(
+        "   ERROR : user specified password length is too long -> " +
+          passwordLengthParsed
+      );
+      alert(
+        "The password length you specifid (" +
+          passwordLengthParsed +
+          " characters) is too long. Please try again"
+      );
+      validPasswordLength = false;
+    }
+  } while (!validPasswordLength);
+
+  // return the validate, user specified password length
+
+  console.log("     password length -> " + passwordLengthParsed);
   console.log("...getPasswordLength END");
-  return passwordLength;
+
+  return passwordLengthParsed;
 };
 
 var isLowercaseIncluded = function () {
